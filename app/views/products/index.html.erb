@@ -4,9 +4,13 @@
   <% @products.each do |product| %>
     <li>
       <%= product.name %> - <%= number_to_currency(product.price) %>
-    </li>
-    <%= button_to "Add to Cart", add_product_cart_path(@cart.id, product_id: product.id), method: :post %>
+      <%= button_to "Add to Cart",
+              add_product_cart_path(@cart.id, product_id: product.id),
+              method: :post,
+              data: { turbo_frame: "cart_section" } %>
   <% end %>
 </ul>
 
-<%= button_to "Create New Cart", carts_path, method: :post %>
+<%= turbo_frame_tag "cart_section" do %>
+  <%= render "cart", cart: @cart %>
+<% end %>

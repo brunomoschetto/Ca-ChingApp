@@ -10,6 +10,15 @@ class CartsController < ApplicationController
 
     @cart.cart_items.create(product: @product, quantity: 1)
 
-    redirect_to cart_path(@cart), notice: "Product added to cart!"
+    respond_to do |format|
+      format.html { redirect_to products_path }
+      format.turbo_stream {
+        render turbo_stream: turbo_stream.replace(
+          "cart_section",
+          partial: "products/cart",
+          locals: { cart: @cart }
+        )
+      }
+    end
   end
 end
