@@ -1,0 +1,20 @@
+<h1>Your Cart</h1>
+<p>Cart ID: <%= @cart.id %></p>
+
+<% if @cart.empty? %>
+  <p>Your cart is empty</p>
+<% else %>
+  <ul>
+    <% @cart.cart_items.each do |item| %>
+      <li>
+        <%= item.product.name %> - Quantity: <%= item.quantity %> -
+        Price per unit: <%= number_to_currency(item.product.price) %> -
+        Total for this item: <%= number_to_currency(item.product.price * item.quantity) %>
+      </li>
+    <% end %>
+  </ul>
+
+  <h3>Total: <%= number_to_currency(@cart.total_price) %></h3>
+
+  <%= link_to 'Continue Shopping', products_path %> |
+<% end %>
