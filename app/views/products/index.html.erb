@@ -1,6 +1,14 @@
 <h1>Products</h1>
-
 <%= link_to "See my cart", cart_path, class: "cart-link" %>
+
+<div class="discounts-info">
+  <h2>Current Promotions</h2>
+  <ul>
+    <li>Green Tea: Buy one, get one free!</li>
+    <li>Strawberries: Buy 3 or more and pay only €4.50 each</li>
+    <li>Coffee: Buy 3 or more and get 2/3 of the original price</li>
+  </ul>
+</div>
 
 <ul>
   <% @products.each do |product| %>
