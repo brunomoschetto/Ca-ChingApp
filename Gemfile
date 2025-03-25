@@ -2,9 +2,15 @@ source "https://rubygems.org"
 
 ruby "3.3.5"
 
+# The gem below where added in order to install the proper testing enviroment
 gem 'rails-controller-testing'
 
+# The gem below where added in order to silence a rails warning
 gem 'ostruct'
+
+# # The gems below where added in order to install bootstrap properly
+# gem 'bootstrap', '~> 5.3.0'
+# gem 'sassc-rails'
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 7.1.5"
