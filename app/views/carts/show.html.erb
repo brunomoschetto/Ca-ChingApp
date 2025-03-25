@@ -21,6 +21,9 @@
           <td><%= number_to_currency(item.product.price) %></td>
           <td><%= item.quantity %></td>
           <td><%= number_to_currency(item.product.price * item.quantity) %></td>
+          <td>
+            <%= button_to "Remove", remove_item_cart_path(cart_item_id: item.id), method: :delete %>
+          </td>
         </tr>
       <% end %>
     </tbody>
