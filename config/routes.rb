@@ -4,5 +4,6 @@ Rails.application.routes.draw do
   resources :products, only: [:index]
   resource :cart, only: [:show] do
     post :add_product
+    delete :remove_item
   end
 end
