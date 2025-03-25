@@ -1,24 +1,27 @@
 class CartsController < ApplicationController
-  def create
-    @cart = Cart.create
-    redirect_to cart_path(@cart)
+
+  def show
+    @cart = current_cart
   end
 
   def add_product
-    @cart = Cart.find(params[:id])
-    @product = Product.find(params[:product_id])
+    product = Product.find(params[:product_id])
+    @cart = current_cart
+    cart_item = @cart.cart_items.find_by(product_id: product.id)
+    if cart_item
+      cart_item.quantity += 1
+      cart_item.save
+    else
+      @cart.cart_items.create(product: product, quantity: 1)
+    end
+    redirect_to cart_path, notice: "#{product.name} added to cart!"
+  end
 
-    @cart.cart_items.create(product: @product, quantity: 1)
+  private
 
-    respond_to do |format|
-      format.html { redirect_to products_path }
-      format.turbo_stream {
-        render turbo_stream: turbo_stream.replace(
-          "cart_section",
-          partial: "products/cart",
-          locals: { cart: @cart }
-        )
-      }
+  def current_cart
+    Cart.find_or_create_by(id: session[:cart_id]).tap do |cart|
+      session[:cart_id] = cart.id
     end
   end
 end

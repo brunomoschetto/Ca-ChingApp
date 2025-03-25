@@ -1,16 +1,13 @@
 <h1>Products</h1>
 
+<%= link_to "See my cart", cart_path, class: "cart-link" %>
+
 <ul>
   <% @products.each do |product| %>
     <li>
       <%= product.name %> - <%= number_to_currency(product.price) %>
-      <%= button_to "Add to Cart",
-              add_product_cart_path(@cart.id, product_id: product.id),
-              method: :post,
-              data: { turbo_frame: "cart_section" } %>
+        <%= form_with(url: add_product_cart_path(product_id: product.id), method: :post) do |form| %>
+          <%= form.submit "Add product to cart" %>
+        <% end %>
   <% end %>
 </ul>
-
-<%= turbo_frame_tag "cart_section" do %>
-  <%= render "cart", cart: @cart %>
-<% end %>
