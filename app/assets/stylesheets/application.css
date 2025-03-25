@@ -1,1 +1,22 @@
+/* Custom styles */
 
+.bg-custom-amber {
+  background-color: #cc9e12d5;
+}
+
+.text-custom-dark {
+  color: #122d3b;
+}
+
+.bg-custom-background {
+  background-color: #27548A;
+}
+
+.bg-custom-amber:hover {
+  background-color: #cc9e12d5 !important;
+}
+
+.btn.bg-custom-amber:hover {
+  background-color: #f1bb09 !important; /* Ligeramente más claro para efecto hover */
+  color: #1A1A2E !important;
+}
