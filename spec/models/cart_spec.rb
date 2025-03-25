@@ -21,4 +21,146 @@ RSpec.describe Cart, type: :model do
       expect { cart.destroy }.to change { CartItem.count }.by(-1)
     end
   end
+
+  describe "discount rules" do
+    let!(:green_tea) { Product.create(code: "GR1", name: "Green Tea", price: 3.11) }
+    let!(:strawberry) { Product.create(code: "SR1", name: "Strawberries", price: 5.00) }
+    let!(:coffee) { Product.create(code: "CF1", name: "Coffee", price: 11.23) }
+
+    before do
+      DiscountRule.create!(
+        name: "Buy one get one free",
+        product_code: "GR1",
+        rule_type: "bogof"
+      )
+
+      DiscountRule.create!(
+        name: "Bulk discount strawberries",
+        product_code: "SR1",
+        rule_type: "bulk_price",
+        value: 4.50
+      )
+
+      DiscountRule.create!(
+        name: "Coffee volume discount",
+        product_code: "CF1",
+        rule_type: "bulk_percentage",
+        value: 0.6667
+      )
+    end
+
+    describe "#total_price" do
+      context "with buy-one-get-one-free discount (Green Tea)" do
+        it "charges for 1 when buying 2" do
+          cart = Cart.create!
+          2.times do
+            cart.add_product(green_tea.id)
+          end
+
+          expect(cart.total_price).to eq(3.11)
+        end
+
+        it "charges for 2 when buying 3" do
+          cart = Cart.create!
+          3.times do
+            cart.add_product(green_tea.id)
+          end
+
+          expect(cart.total_price).to eq(6.22)
+        end
+      end
+
+      context "with bulk price discount (Strawberries)" do
+        it "uses normal price when buying less than 3" do
+          cart = Cart.create!
+          2.times do
+            cart.add_product(strawberry.id)
+          end
+
+          expect(cart.total_price).to eq(10.00)
+        end
+
+        it "uses discounted price when buying 3 or more" do
+          cart = Cart.create!
+          3.times do
+            cart.add_product(strawberry.id)
+          end
+
+          expect(cart.total_price).to eq(13.50)
+        end
+      end
+
+      context "with bulk percentage discount (Coffee)" do
+        it "uses normal price when buying less than 3" do
+          cart = Cart.create!
+          2.times do
+            cart.add_product(coffee.id)
+          end
+
+          expect(cart.total_price).to eq(22.46)
+        end
+
+        it "uses discounted price when buying 3 or more" do
+          cart = Cart.create!
+          3.times do
+            cart.add_product(coffee.id)
+          end
+
+          # 3 * (11.23 * 2/3) ≈ 22.46
+          expect(cart.total_price).to be_within(0.01).of(22.46)
+        end
+      end
+
+      context "with the provided test cases" do
+        it "calculates GR1,GR1 = 3.11€" do
+          cart = Cart.create!
+          cart.add_product(green_tea.id)
+          cart.add_product(green_tea.id)
+
+          expect(cart.total_price).to eq(3.11)
+        end
+
+        it "calculates SR1,SR1,GR1,SR1 = 16.61€" do
+          cart = Cart.create!
+          cart.add_product(strawberry.id)
+          cart.add_product(strawberry.id)
+          cart.add_product(green_tea.id)
+          cart.add_product(strawberry.id)
+
+          expect(cart.total_price).to eq(16.61)
+        end
+
+        it "calculates GR1,CF1,SR1,CF1,CF1 = 30.57€" do
+          cart = Cart.create!
+          cart.add_product(green_tea.id)
+          cart.add_product(coffee.id)
+          cart.add_product(strawberry.id)
+          cart.add_product(coffee.id)
+          cart.add_product(coffee.id)
+
+          expect(cart.total_price).to be_within(0.01).of(30.57)
+        end
+      end
+    end
+  end
+
+  describe "#add_product" do
+    let(:product) { Product.create(code: "GR1", name: "Green Tea", price: 3.11) }
+
+    it "increases the quantity of an existing cart item" do
+      cart = Cart.create!
+      cart.add_product(product.id)
+      cart.add_product(product.id)
+
+      cart_item = cart.cart_items.find_by(product_id: product.id)
+      expect(cart_item.quantity).to eq(2)
+    end
+
+    it "creates a new cart item when the product is not in the cart" do
+      cart = Cart.create!
+      expect {
+        cart.add_product(product.id)
+      }.to change(cart.cart_items, :count).by(1)
+    end
+  end
 end
