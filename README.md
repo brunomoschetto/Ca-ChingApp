@@ -175,11 +175,9 @@ The application was developed following Test-Driven Development (TDD) methodolog
 - Comprehensive test coverage ensures code reliability
 
 ## Potential Improvements
-- Implement user authentication
-- Add more complex discount strategies
-- Create an admin interface for product management
-- Expand error handling
-- Implement persistent cart storage
+- 'Empty Cart' button
+- Add products from the Cart
+- Simulate a checkout process
 
 ## Contributing
 1. Fork the repository
