@@ -21,23 +21,23 @@ CaChingApp is an innovative cash register application developed as part of a tec
 ### Screenshots
 
 #### Main Application View
-![Main Application View](/docs/screenshots/main_view.png)
+![Main Application View](/docs/screenshots/main_view.jpg)
 *Landing page showing available products and current promotions*
 
 #### Empty Cart
-![Empty Cart](/docs/screenshots/empty_cart.png)
+![Empty Cart](/docs/screenshots/empty_cart.jpg)
 *Cart view when no items have been added*
 
 #### Cart with Some Products
-![Cart with Some Products](/docs/screenshots/cart_with_some_products.png)
+![Cart with Some Products](/docs/screenshots/cart_with_some_products.jpg)
 *Cart with products, no discounts applied*
 
 #### Cart with Green Tea Discount
-![Cart with Green Tea Discount](/docs/screenshots/cart_with_a_discount_applied_automatically.png)
+![Cart with Green Tea Discount](/docs/screenshots/cart_with_a_discount_applied_automatically.jpg)
 *Cart showing the "Buy one, get one free" Green Tea discount*
 
 #### Cart with All Discounts Applied
-![Cart with All Discounts](/docs/screenshots/cart_with_all_dicounts_applied.png)
+![Cart with All Discounts](/docs/screenshots/cart_with_all_dicounts_applied.jpg)
 *Cart demonstrating all available discount rules*
 
 ## Business Context
@@ -69,19 +69,19 @@ This project represents a snapshot of my current technical skills and learning j
 ## Test Cases Visualization
 
 ### Test Case 1: Green Tea Buy One Get One Free
-![Test Case 1](/docs/screenshots/test_case_1.png)
+![Test Case 1](/docs/screenshots/test_case_1.jpg)
 *Basket: GR1, GR1*
 - Expected Total: 3.11€
 - Demonstrates Green Tea buy-one-get-one-free rule
 
 ### Test Case 2: Mixed Products with Strawberry Discount
-![Test Case 2](/docs/screenshots/test_case_2.png)
+![Test Case 2](/docs/screenshots/test_case_2.jpg)
 *Basket: SR1, SR1, GR1, SR1*
 - Expected Total: 16.61€
 - Shows Strawberry bulk discount
 
 ### Test Case 3: Mixed Products with Coffee Discount
-![Test Case 3](/docs/screenshots/test_case_3.png)
+![Test Case 3](/docs/screenshots/test_case_3.jpg)
 *Basket: GR1, CF1, SR1, CF1, CF1*
 - Expected Total: 30.57€
 - Illustrates Coffee volume discount
