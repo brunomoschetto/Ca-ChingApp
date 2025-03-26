@@ -37,7 +37,7 @@ CaChingApp is an innovative cash register application developed as part of a tec
 *Cart showing the "Buy one, get one free" Green Tea discount*
 
 #### Cart with All Discounts Applied
-![Cart with All Discounts](/docs/screenshots/cart_with_all_dicounts_applied.jpg)
+![Cart with All Discounts](/docs/screenshots/cart_with_all_discounts_applied.jpg)
 *Cart demonstrating all available discount rules*
 
 ## Business Context
