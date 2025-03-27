@@ -7,15 +7,9 @@ class CartsController < ApplicationController
   def add_product
     product = Product.find(params[:product_id])
     @cart = current_cart
-    cart_item = @cart.cart_items.find_by(product_id: product.id)
 
-    if cart_item
-      cart_item.quantity += 1
-      cart_item.save
-    else
-      @cart.cart_items.create(product: product, quantity: 1)
-    end
-    
+    @cart.add_product(product.id)
+
     redirect_to cart_path, notice: "#{product.name} added to cart!"
   end
 
