@@ -1,16 +1,20 @@
 class CartsController < ApplicationController
-
   def show
     @cart = current_cart
   end
 
   def add_product
-    product = Product.find(params[:product_id])
     @cart = current_cart
+    product = Product.find(params[:product_id])
 
-    @cart.add_product(product.id)
+    item = @cart.cart_items.find_or_initialize_by(product: product)
+    item.quantity = (item.quantity || 0) + 1
+    item.save!
 
-    redirect_to cart_path, notice: "#{product.name} added to cart!"
+    respond_to do |format|
+      format.turbo_stream
+      format.html { redirect_to products_path, notice: 'Added to cart' }
+    end
   end
 
   def remove_item
@@ -24,6 +28,6 @@ class CartsController < ApplicationController
       cart_item.destroy
     end
 
-    redirect_to cart_path, notice: "Item removed from cart"
+    redirect_to cart_path, notice: 'Item removed from cart'
   end
 end
