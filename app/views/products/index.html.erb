@@ -24,7 +24,9 @@
 </div>
 
 <div class="text-center mb-4">
-  <%= link_to "See my cart", cart_path, class: "btn btn-lg fw-bold bg-custom-amber text-custom-dark px-4 py-2 rounded-pill shadow-sm" %>
+  <turbo-frame id="cart">
+    <%= render 'carts/cart', cart: @cart %>
+  </turbo-frame>
 </div>
 
 <div class="card mb-4 discounts-info">
