@@ -8,5 +8,11 @@ class DiscountRule < ApplicationRecord
 
   validates :name, :product_code, :rule_type, presence: true
   validates :rule_type, inclusion: { in: TYPES }
-  validates :value, presence: true, unless: -> { rule_type == T_BOGOF }
+  validates :value,
+            presence: { message: "can't be blank for bulk price discounts" },
+            if: -> { rule_type == T_BULK_PRICE }
+  validates :value,
+            presence: { message: "can't be blank for bulk percentage discounts" },
+            if: -> { rule_type == T_BULK_PERCENT }
+  validates :value, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
 end
