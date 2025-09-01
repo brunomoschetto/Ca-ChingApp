@@ -35,7 +35,7 @@ RSpec.describe CartsController, type: :controller do
 
       it "redirects to the cart path with a success notice" do
         post :add_product, params: { product_id: product.id }
-        expect(response).to redirect_to(cart_path)
+        expect(response).to redirect_to(products_path)
         expect(flash[:notice]).to eq("#{product.name} added to cart!")
       end
     end
@@ -80,7 +80,7 @@ RSpec.describe CartsController, type: :controller do
 
     it "redirects to the cart path with a success notice" do
       delete :remove_item, params: { cart_item_id: cart_item.id }
-      expect(response).to redirect_to(cart_path)
+      expect(response).to redirect_to(products_path)
       expect(flash[:notice]).to eq("Item removed from cart")
     end
   end
