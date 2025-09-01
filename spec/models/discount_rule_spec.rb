@@ -5,8 +5,8 @@ RSpec.describe DiscountRule, type: :model do
   it "is valid with a name, product_code and rule_type" do
     rule = DiscountRule.new(
       name: "Buy one get one free",
-      product_code: "GR1",
-      rule_type: "bogof"
+      product_code: Product::CODE_GR1,
+      rule_type: DiscountRule::T_BOGOF
     )
     expect(rule).to be_valid
   end
@@ -33,8 +33,8 @@ RSpec.describe DiscountRule, type: :model do
     it "allows bogof rule type without a value" do
       rule = DiscountRule.new(
         name: "Buy one get one free",
-        product_code: "GR1",
-        rule_type: "bogof",
+        product_code: Product::CODE_GR1,
+        rule_type: DiscountRule::T_BOGOF,
         value: nil
       )
       expect(rule).to be_valid
@@ -43,8 +43,8 @@ RSpec.describe DiscountRule, type: :model do
     it "requires a value for bulk_price rule type" do
       rule = DiscountRule.new(
         name: "Bulk discount",
-        product_code: "SR1",
-        rule_type: "bulk_price",
+        product_code: Product::CODE_SR1,
+        rule_type: DiscountRule::T_BULK_PRICE,
         value: nil
       )
       rule.valid?
@@ -54,8 +54,8 @@ RSpec.describe DiscountRule, type: :model do
     it "requires a value for bulk_percentage rule type" do
       rule = DiscountRule.new(
         name: "Percentage discount",
-        product_code: "CF1",
-        rule_type: "bulk_percentage",
+        product_code: Product::CODE_CF1,
+        rule_type: DiscountRule::T_BULK_PERCENT,
         value: nil
       )
       rule.valid?

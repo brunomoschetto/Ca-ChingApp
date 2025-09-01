@@ -37,12 +37,12 @@
                 <td>
                   <% if rule %>
                     <% case rule.rule_type %>
-                    <% when "bogof" %>
+                    <% when DiscountRule::T_BOGOF %>
                       <span class="badge bg-custom-amber text-custom-dark">Buy one, get one free</span>
-                    <% when "bulk_price" %>
-                      <%= item.quantity >= 3 ? "<span class='badge bg-custom-amber text-custom-dark'>#{number_to_currency(rule.value)} each (3+)</span>".html_safe : "<span class='badge bg-secondary'>None</span>".html_safe %>
-                    <% when "bulk_percentage" %>
-                      <%= item.quantity >= 3 ? "<span class='badge bg-custom-amber text-custom-dark'>2/3 price (3+)</span>".html_safe : "<span class='badge bg-secondary'>None</span>".html_safe %>
+                    <% when DiscountRule::T_BULK_PRICE %>
+                      <%= item.quantity >= DiscountRule::MIN_BULK_QTY ? "<span class='badge bg-custom-amber text-custom-dark'>#{number_to_currency(rule.value)} each (3+)</span>".html_safe : "<span class='badge bg-secondary'>None</span>".html_safe %>
+                    <% when DiscountRule::T_BULK_PERCENT %>
+                      <%= item.quantity >= DiscountRule::MIN_BULK_QTY ? "<span class='badge bg-custom-amber text-custom-dark'>2/3 price (3+)</span>".html_safe : "<span class='badge bg-secondary'>None</span>".html_safe %>
                     <% end %>
                   <% else %>
                     <span class="badge bg-secondary">None</span>
