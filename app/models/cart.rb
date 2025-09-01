@@ -51,4 +51,16 @@ class Cart < ApplicationRecord
 
     total.round(2)
   end
+
+  def remove_item_by_id(cart_item_id)
+    item = cart_items.find_by(id: cart_item_id)
+    return self unless item
+
+    if item.quantity && item.quantity > 1
+      item.decrement!(:quantity)
+    else
+      item.destroy
+    end
+    self
+  end
 end

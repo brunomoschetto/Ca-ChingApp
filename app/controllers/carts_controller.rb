@@ -19,15 +19,11 @@ class CartsController < ApplicationController
 
   def remove_item
     @cart = current_cart
-    cart_item = @cart.cart_items.find(params[:cart_item_id])
+    @cart.remove_item_by_id(params[:cart_item_id])
 
-    if cart_item.quantity > 1
-      cart_item.quantity -= 1
-      cart_item.save
-    else
-      cart_item.destroy
+    respond_to do |format|
+      format.turbo_stream { render :add_product }
+      format.html { redirect_to products_path, notice: 'Item removed' }
     end
-
-    redirect_to cart_path, notice: 'Item removed from cart'
   end
 end
