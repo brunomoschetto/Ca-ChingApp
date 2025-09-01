@@ -15,38 +15,15 @@ class Cart < ApplicationRecord
   end
 
   def total_price
-    total = 0
+    groups = cart_items.includes(:product).group_by { |ci| ci.product.code }
+    total  = 0
 
-    product_groups = cart_items.includes(:product).group_by { |item| item.product.code }
+    groups.each do |code, items|
+      qty        = items.sum(&:quantity)
+      unit_price = items.first.product.price
+      rule       = DiscountRule.find_by(product_code: code)
 
-    product_groups.each do |product_code, items|
-      product = items.first.product
-      quantity = items.sum(&:quantity)
-
-      rule = DiscountRule.find_by(product_code: product_code)
-
-      if rule.nil?
-        total += product.price * quantity
-      else
-        case rule.rule_type
-        when "bogof"
-          paid_quantity = (quantity / 2.0).ceil
-          total += product.price * paid_quantity
-        when "bulk_price"
-          if quantity >= 3
-            total += rule.value * quantity
-          else
-            total += product.price * quantity
-          end
-        when "bulk_percentage"
-          if quantity >= 3
-            discounted_price = product.price * rule.value
-            total += discounted_price * quantity
-          else
-            total += product.price * quantity
-          end
-        end
-      end
+      total += price_for_group(unit_price, qty, rule)
     end
 
     total.round(2)
@@ -62,5 +39,43 @@ class Cart < ApplicationRecord
       item.destroy
     end
     self
+  end
+
+  private
+
+  def price_for_group(unit_price, qty, rule)
+    return unit_price * qty unless rule
+
+    case rule.rule_type
+    when DiscountRule::T_BOGOF
+      apply_bogof(unit_price, qty)
+    when DiscountRule::T_BULK_PRICE
+      apply_bulk_price(unit_price, qty, rule.value)
+    when DiscountRule::T_BULK_PERCENT
+      apply_bulk_percentage(unit_price, qty, rule.value)
+    else
+      unit_price * qty
+    end
+  end
+
+  def apply_bogof(unit_price, qty)
+    billable = (qty / 2.0).ceil
+    unit_price * billable
+  end
+
+  def apply_bulk_price(unit_price, qty, bulk_unit_price)
+    if qty >= DiscountRule::MIN_BULK_QTY
+      bulk_unit_price * qty
+    else
+      unit_price * qty
+    end
+  end
+
+  def apply_bulk_percentage(unit_price, qty, factor)
+    if qty >= DiscountRule::MIN_BULK_QTY
+      (unit_price * factor) * qty
+    else
+      unit_price * qty
+    end
   end
 end
