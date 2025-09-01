@@ -35,15 +35,8 @@
                 <td><%= item.quantity %></td>
                 <td class="text-success"><%= number_to_currency(item.product.price * item.quantity) %></td>
                 <td>
-                  <% if rule %>
-                    <% case rule.rule_type %>
-                    <% when DiscountRule::T_BOGOF %>
-                      <span class="badge bg-custom-amber text-custom-dark">Buy one, get one free</span>
-                    <% when DiscountRule::T_BULK_PRICE %>
-                      <%= item.quantity >= DiscountRule::MIN_BULK_QTY ? "<span class='badge bg-custom-amber text-custom-dark'>#{number_to_currency(rule.value)} each (3+)</span>".html_safe : "<span class='badge bg-secondary'>None</span>".html_safe %>
-                    <% when DiscountRule::T_BULK_PERCENT %>
-                      <%= item.quantity >= DiscountRule::MIN_BULK_QTY ? "<span class='badge bg-custom-amber text-custom-dark'>2/3 price (3+)</span>".html_safe : "<span class='badge bg-secondary'>None</span>".html_safe %>
-                    <% end %>
+                  <% if promo_applied_for(item) %>
+                    <span class="badge bg-custom-amber text-custom-dark"><%= promo_applied_for(item) %></span>
                   <% else %>
                     <span class="badge bg-secondary">None</span>
                   <% end %>
@@ -58,8 +51,7 @@
             <tr>
               <th colspan="3">Subtotal</th>
               <th class="text-success">
-                <% subtotal = @cart.cart_items.sum { |item| item.product.price * item.quantity } %>
-                <%= number_to_currency(subtotal) %>
+                <%= number_to_currency(pre_discount_subtotal(cart)) %>
               </th>
               <th colspan="2"></th>
             </tr>
