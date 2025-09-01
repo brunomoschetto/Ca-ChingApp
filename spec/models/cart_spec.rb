@@ -163,4 +163,32 @@ RSpec.describe Cart, type: :model do
       }.to change(cart.cart_items, :count).by(1)
     end
   end
+
+    describe "#remove_item_by_id" do
+    it "decrements quantity when > 1" do
+      cart = Cart.create!
+      product = Product.create!(code: "T1", name: "Test 1", price: 1.0)
+      item = CartItem.create!(cart: cart, product: product, quantity: 2)
+
+      cart.remove_item_by_id(item.id)
+
+      expect(item.reload.quantity).to eq(1)
+    end
+
+    it "destroys the item when quantity is 1" do
+      cart = Cart.create!
+      product = Product.create!(code: "T2", name: "Test 2", price: 1.0)
+      item = CartItem.create!(cart: cart, product: product, quantity: 1)
+
+      cart.remove_item_by_id(item.id)
+
+      expect(CartItem.find_by(id: item.id)).to be_nil
+    end
+
+    it "does nothing (no error) if the item is not found" do
+      cart = Cart.create!
+      expect { cart.remove_item_by_id(999_999) }.not_to raise_error
+      expect(cart.cart_items.count).to eq(0)
+    end
+  end
 end
