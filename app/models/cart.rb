@@ -41,6 +41,11 @@ class Cart < ApplicationRecord
     self
   end
 
+  def subtotal_for(item)
+    rule = DiscountRule.find_by(product_code: item.product.code)
+    price_for_group(item.product.price, item.quantity, rule)
+  end
+
   private
 
   def price_for_group(unit_price, qty, rule)
