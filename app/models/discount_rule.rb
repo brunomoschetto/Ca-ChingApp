@@ -1,19 +1,18 @@
 class DiscountRule < ApplicationRecord
-  validates :name, presence: true
-  validates :product_code, presence: true
-  validates :rule_type, presence: true
+  T_BOGOF        = 'bogof'.freeze
+  T_BULK_PRICE   = 'bulk_price'.freeze
+  T_BULK_PERCENT = 'bulk_percentage'.freeze
+  TYPES          = [T_BOGOF, T_BULK_PRICE, T_BULK_PERCENT].freeze
 
-  validate :value_required_for_certain_rule_types
+  MIN_BULK_QTY   = 3
 
-  private
-
-  def value_required_for_certain_rule_types
-    if rule_type == "bulk_price" && value.blank?
-      errors.add(:value, "can't be blank for bulk price discounts")
-    end
-
-    if rule_type == "bulk_percentage" && value.blank?
-      errors.add(:value, "can't be blank for bulk percentage discounts")
-    end
-  end
+  validates :name, :product_code, :rule_type, presence: true
+  validates :rule_type, inclusion: { in: TYPES }
+  validates :value,
+            presence: { message: "can't be blank for bulk price discounts" },
+            if: -> { rule_type == T_BULK_PRICE }
+  validates :value,
+            presence: { message: "can't be blank for bulk percentage discounts" },
+            if: -> { rule_type == T_BULK_PERCENT }
+  validates :value, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
 end

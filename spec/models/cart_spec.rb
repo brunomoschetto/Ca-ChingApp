@@ -15,7 +15,7 @@ RSpec.describe Cart, type: :model do
 
     it "destroys associated cart_items when destroyed" do
       cart = Cart.create!
-      product = Product.create!(code: "GR1", name: "Green Tea", price: 3.11)
+      product = Product.create!(code: Product::CODE_GR1, name: "Green Tea", price: 3.11)
       cart.cart_items.create!(product: product, quantity: 2)
 
       expect { cart.destroy }.to change { CartItem.count }.by(-1)
@@ -23,28 +23,28 @@ RSpec.describe Cart, type: :model do
   end
 
   describe "discount rules" do
-    let!(:green_tea) { Product.create(code: "GR1", name: "Green Tea", price: 3.11) }
-    let!(:strawberry) { Product.create(code: "SR1", name: "Strawberries", price: 5.00) }
-    let!(:coffee) { Product.create(code: "CF1", name: "Coffee", price: 11.23) }
+    let!(:green_tea) { Product.create(code: Product::CODE_GR1, name: "Green Tea", price: 3.11) }
+    let!(:strawberry) { Product.create(code: Product::CODE_SR1, name: "Strawberries", price: 5.00) }
+    let!(:coffee) { Product.create(code: Product::CODE_CF1, name: "Coffee", price: 11.23) }
 
     before do
       DiscountRule.create!(
         name: "Buy one get one free",
-        product_code: "GR1",
-        rule_type: "bogof"
+        product_code: Product::CODE_GR1,
+        rule_type: DiscountRule::T_BOGOF
       )
 
       DiscountRule.create!(
         name: "Bulk discount strawberries",
-        product_code: "SR1",
-        rule_type: "bulk_price",
+        product_code: Product::CODE_SR1,
+        rule_type: DiscountRule::T_BULK_PRICE,
         value: 4.50
       )
 
       DiscountRule.create!(
         name: "Coffee volume discount",
-        product_code: "CF1",
-        rule_type: "bulk_percentage",
+        product_code: Product::CODE_CF1,
+        rule_type: DiscountRule::T_BULK_PERCENT,
         value: 0.6667
       )
     end
@@ -145,7 +145,7 @@ RSpec.describe Cart, type: :model do
   end
 
   describe "#add_product" do
-    let(:product) { Product.create(code: "GR1", name: "Green Tea", price: 3.11) }
+    let(:product) { Product.create(code: Product::CODE_GR1, name: "Green Tea", price: 3.11) }
 
     it "increases the quantity of an existing cart item" do
       cart = Cart.create!

@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe CartsController, type: :controller do
-  let(:product) { Product.create(code: "GR1", name: "Green Tea", price: 3.11) }
+  let(:product) { Product.create(code: Product::CODE_GR1, name: "Green Tea", price: 3.11) }
 
   before do
     session[:cart_id] = Cart.create.id
