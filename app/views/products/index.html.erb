@@ -2,6 +2,8 @@
   <h1 class="text-white">Ca-Ching-App</h1>
 </div>
 
+<div id="react-root"></div>
+
 <div class="card mb-4 products-card">
   <div class="card-header bg-custom-amber text-custom-dark">
     <h2 class="h5 mb-0">Products</h2>
@@ -20,7 +22,7 @@
           <%= form_with(url: add_product_cart_path(product_id: product.id), method: :post) do |form| %>
             <%= form.submit "Add product to cart", class: "btn btn-sm border-0 bg-custom-amber text-custom-dark" %>
           <% end %>
-          
+
         </li>
       <% end %>
     </ul>
