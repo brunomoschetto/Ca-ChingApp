@@ -1,3 +1,11 @@
-// Configure your import map in config/importmap.rb. Read more: https://github.com/rails/importmap-rails
-import "@hotwired/turbo-rails"
-import "controllers"
+import "@hotwired/turbo-rails";
+import { createRoot } from "react-dom/client";
+import HelloReact from "./components/HelloReact.jsx";
+
+document.addEventListener("turbo:load", () => {
+  const el = document.getElementById("react-root");
+  if (el && !el.dataset.mounted) {
+    createRoot(el).render(<HelloReact name="Ca-Ching-App" />);
+    el.dataset.mounted = "1";
+  }
+});
