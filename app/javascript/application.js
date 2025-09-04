@@ -4,9 +4,9 @@ import HelloReact from "./components/HelloReact.jsx";
 import ProductsList from "./components/ProductsList.jsx";
 
 document.addEventListener("turbo:load", () => {
-  const el = document.getElementById("react-root");
-  if (el && !el.dataset.mounted) {
-    createRoot(el).render(<HelloReact name="Ca-Ching-App" />);
+  const hello = document.getElementById("react-root");
+  if (hello && !hello.dataset.mounted) {
+    createRoot(hello).render(<HelloReact name="Ca-Ching-App" />);
     hello.dataset.mounted = "1";
   }
 

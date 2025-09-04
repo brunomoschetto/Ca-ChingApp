@@ -27,8 +27,6 @@ export default function ProductsList() {
                 {p.promo === "bulk_price" && <span className="badge bg-info">Bulk price from 3</span>}
                 {p.promo === "bulk_percentage" && <span className="badge bg-info">Bulk discount from 3</span>}
               </div>
-
-              {/* Form clásico ⇒ POST a /cart/add_product ⇒ Turbo actualiza el frame del carrito */}
               <form action="/cart/add_product" method="post" data-turbo="true">
                 <input type="hidden" name="authenticity_token" value={token} />
                 <input type="hidden" name="product_id" value={p.id} />
